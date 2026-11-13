@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: "bun"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    groups:
+      cloudflare:
+        patterns:
+          - "@cloudflare/*"
+          - "wrangler"
+      types:
+        patterns:
+          - "@types/*"
+    ignore:
+      # vitest 5.1 calls AsyncLocalStorage.disable(), which workerd doesn't implement,
+      # breaking vi.mock under @cloudflare/vitest-plugin. Remove once that's fixed.
+      - dependency-name: "vitest"
+        versions: ["5.1.x"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5

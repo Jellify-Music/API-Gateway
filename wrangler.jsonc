@@ -1,0 +1,24 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "jellify-api",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-01",
+	"observability": {
+		"enabled": true
+	},
+	"routes": [{ "pattern": "api.jellify.app", "custom_domain": true }],
+	/**
+	 * The patrons Worker, which also still serves patrons.jellify.app for existing App builds
+	 * https://github.com/Jellify-Music/Patreon-Campaign-List-Worker
+	 */
+	"services": [{ "binding": "PATRONS", "service": "supporters-list-function" }],
+	/**
+	 * AutoEq profiles, uploaded under `profiles/` by the AutoEq-TS-SDK publish workflow
+	 * https://github.com/Jellify-Music/AutoEq-TS-SDK
+	 */
+	"r2_buckets": [{ "binding": "AUTOEQ", "bucket_name": "jellify-autoeq" }]
+}
